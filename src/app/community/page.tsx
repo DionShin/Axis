@@ -1,24 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import { GitFork, Heart, Search } from 'lucide-react';
+import { GitFork, Heart, Search, Share2 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { communityAPI, statsAPI, type CommunityRoutineResponse } from '@/lib/api';
 import { formatFrequency } from '@/lib/utils';
 import ForkModal from '@/components/ForkModal';
+import ShareRoutineSheet from '@/components/ShareRoutineSheet';
 
 const ALL_TAGS = ['전체', '피부', '헬스', '독서', '경제', '자세', '루틴화'];
 
 export default function CommunityPage() {
   const qc = useQueryClient();
   const [selectedTag, setSelectedTag] = useState('전체');
+  const [searchQuery, setSearchQuery] = useState('');
   const [forkTarget, setForkTarget] = useState<CommunityRoutineResponse | null>(null);
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [forkedIds, setForkedIds] = useState<Set<string>>(new Set());
+  const [shareOpen, setShareOpen] = useState(false);
 
   const { data: routines = [], isLoading } = useQuery({
-    queryKey: ['community', selectedTag],
-    queryFn: () => communityAPI.getAll(selectedTag),
+    queryKey: ['community', selectedTag, searchQuery],
+    queryFn: () => communityAPI.getAll(selectedTag, searchQuery || undefined),
   });
 
   const { data: stats = [] } = useQuery({
@@ -43,18 +46,42 @@ export default function CommunityPage() {
     <main className="min-h-screen bg-[#0a0a0c] text-white px-5 pt-8">
 
       {/* 헤더 */}
-      <header className="mb-6">
-        <h1 className="text-xl font-black mb-1">커뮤니티 루틴</h1>
-        <p className="text-xs text-gray-500">다른 유저의 루틴을 내 플랜으로 복제하세요</p>
+      <header className="flex items-start justify-between mb-6">
+        <div>
+          <h1 className="text-xl font-black mb-1">커뮤니티 루틴</h1>
+          <p className="text-xs text-gray-500">다른 유저의 루틴을 내 플랜으로 복제하세요</p>
+        </div>
+        <button
+          onClick={() => setShareOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 mt-1"
+          style={{ background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}
+        >
+          <Share2 size={13} />
+          공유하기
+        </button>
       </header>
 
-      {/* 검색바 (추후 기능) */}
+      {/* 검색바 */}
       <div
         className="flex items-center gap-2 px-4 py-3 rounded-2xl mb-4"
         style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.06)' }}
       >
-        <Search size={15} className="text-gray-600" />
-        <span className="text-sm text-gray-600">루틴 검색...</span>
+        <Search size={15} className="text-gray-600 shrink-0" />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="루틴명, 설명, 카테고리 검색..."
+          className="flex-1 bg-transparent text-sm text-white placeholder-gray-600 outline-none"
+        />
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery('')}
+            className="text-gray-600 text-xs hover:text-gray-400 transition-colors"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       {/* 태그 필터 */}
@@ -80,6 +107,16 @@ export default function CommunityPage() {
           {[1,2,3].map(i => (
             <div key={i} className="h-48 rounded-2xl animate-pulse" style={{ background: '#0f1117' }} />
           ))}
+        </div>
+      )}
+
+      {/* 검색 결과 없음 */}
+      {!isLoading && routines.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-gray-600 text-sm">검색 결과가 없습니다.</p>
+          {searchQuery && (
+            <p className="text-gray-700 text-xs mt-1">"{searchQuery}" 관련 루틴을 찾지 못했습니다.</p>
+          )}
         </div>
       )}
 
@@ -205,6 +242,9 @@ export default function CommunityPage() {
           setForkTarget(null);
         }}
       />
+
+      {/* 루틴 공유 시트 */}
+      <ShareRoutineSheet open={shareOpen} onClose={() => setShareOpen(false)} />
     </main>
   );
 }

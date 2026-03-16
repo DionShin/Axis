@@ -73,8 +73,15 @@ export const historyAPI = {
 
 // ─── Community API ────────────────────────────────────────────────
 export const communityAPI = {
-  getAll: (tag?: string) =>
-    fetchAPI<CommunityRoutineResponse[]>(`/community/${tag && tag !== '전체' ? `?tag=${tag}` : ''}`),
+  getAll: (tag?: string, q?: string) =>
+    fetchAPI<CommunityRoutineResponse[]>(
+      `/community/?${tag && tag !== '전체' ? `tag=${tag}` : ''}${q ? `&q=${encodeURIComponent(q)}` : ''}`
+    ),
+  share: (body: CommunityShareRequest) =>
+    fetchAPI<CommunityRoutineResponse>('/community/share', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
   fork: (communityId: string, categoryId: string, notificationTime?: string) =>
     fetchAPI<{ message: string; new_routine_id: string }>(
       `/community/${communityId}/fork?category_id=${categoryId}${notificationTime ? `&notification_time=${notificationTime}` : ''}`,
@@ -185,3 +192,15 @@ export interface RoutineCreateRequest {
   is_forked?: boolean; original_routine_id?: string; original_author?: string;
 }
 export interface LogToggleRequest { routine_id: string; date: string; completed: boolean; note?: string; }
+export interface CommunityShareRequest {
+  stat_id: string;
+  category_name: string;
+  routine_name: string;
+  description: string;
+  frequency: string;
+  days_of_week?: number[];
+  notification_time?: string;
+  tags: string[];
+  author_name: string;
+  author_level: number;
+}

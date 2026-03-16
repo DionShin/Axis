@@ -12,8 +12,12 @@ router = APIRouter(prefix="/community", tags=["community"])
 
 
 @router.get("/", response_model=list[CommunityRoutineResponse])
-async def get_community_routines(tag: str | None = None, db: AsyncSession = Depends(get_db)):
-    """커뮤니티 루틴 목록 (태그 필터 선택)."""
+async def get_community_routines(
+    tag: str | None = None,
+    q: str | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """커뮤니티 루틴 목록 (태그 필터 + 텍스트 검색 선택)."""
     result = await db.execute(
         select(CommunityRoutine).order_by(CommunityRoutine.fork_count.desc())
     )
@@ -21,6 +25,15 @@ async def get_community_routines(tag: str | None = None, db: AsyncSession = Depe
 
     if tag and tag != "전체":
         routines = [r for r in routines if tag in r.tags]
+
+    if q:
+        q_lower = q.lower()
+        routines = [
+            r for r in routines
+            if q_lower in r.routine_name.lower()
+            or q_lower in (r.description or "").lower()
+            or q_lower in r.category_name.lower()
+        ]
 
     return [CommunityRoutineResponse(
         id=r.id,
@@ -39,6 +52,31 @@ async def get_community_routines(tag: str | None = None, db: AsyncSession = Depe
         like_count=r.like_count,
         created_at=r.created_at,
     ) for r in routines]
+
+
+@router.post("/share", response_model=CommunityRoutineResponse, status_code=201)
+async def share_routine(body: CommunityRoutineCreate, db: AsyncSession = Depends(get_db), user_id: str = Depends(get_current_user_id)):
+    """내 루틴을 커뮤니티에 공유."""
+    body_data = body.model_dump()
+    author_name = body_data.pop("author_name", "익명")
+    author_level = body_data.pop("author_level", 1)
+
+    cr = CommunityRoutine(
+        author_user_id=user_id,
+        author_name=author_name,
+        author_level=author_level,
+        **body_data,
+    )
+    db.add(cr)
+    await db.commit()
+    await db.refresh(cr)
+    return CommunityRoutineResponse(
+        id=cr.id, author_user_id=cr.author_user_id, author_name=cr.author_name,
+        author_level=cr.author_level, stat_id=cr.stat_id, category_name=cr.category_name,
+        routine_name=cr.routine_name, description=cr.description, frequency=cr.frequency,
+        days_of_week=cr.days_of_week, notification_time=cr.notification_time,
+        tags=cr.tags, fork_count=cr.fork_count, like_count=cr.like_count, created_at=cr.created_at,
+    )
 
 
 @router.post("/{community_id}/fork", response_model=dict)
@@ -103,24 +141,3 @@ async def like_routine(community_id: str, db: AsyncSession = Depends(get_db)):
     cr.like_count += 1
     await db.commit()
     return {"like_count": cr.like_count}
-
-
-@router.post("/share", response_model=CommunityRoutineResponse, status_code=201)
-async def share_routine(body: CommunityRoutineCreate, db: AsyncSession = Depends(get_db), user_id: str = Depends(get_current_user_id)):
-    """내 루틴을 커뮤니티에 공유."""
-    cr = CommunityRoutine(
-        author_user_id=user_id,
-        author_name="나의닉네임",  # 실제 구현: users 테이블에서 조회
-        author_level=1,
-        **body.model_dump(),
-    )
-    db.add(cr)
-    await db.commit()
-    await db.refresh(cr)
-    return CommunityRoutineResponse(
-        id=cr.id, author_user_id=cr.author_user_id, author_name=cr.author_name,
-        author_level=cr.author_level, stat_id=cr.stat_id, category_name=cr.category_name,
-        routine_name=cr.routine_name, description=cr.description, frequency=cr.frequency,
-        days_of_week=cr.days_of_week, notification_time=cr.notification_time,
-        tags=cr.tags, fork_count=cr.fork_count, like_count=cr.like_count, created_at=cr.created_at,
-    )

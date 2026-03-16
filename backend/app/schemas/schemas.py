@@ -124,6 +124,8 @@ class CommunityRoutineCreate(BaseModel):
     days_of_week: Optional[list[int]] = None
     notification_time: Optional[str] = None
     tags: list[str] = []
+    author_name: str = "익명"
+    author_level: int = 1
 
 class CommunityRoutineResponse(BaseModel):
     id: str
