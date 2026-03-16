@@ -28,6 +28,16 @@ export default function LoginPage() {
     if (error) { setError(error.message); setLoading(false); }
   };
 
+  // 깃허브 로그인
+  const handleGithub = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+    if (error) { setError(error.message); setLoading(false); }
+  };
+
   // 이메일 매직링크 (비밀번호 없이 로그인)
   const handleMagicLink = async () => {
     if (!email) return;
@@ -57,7 +67,7 @@ export default function LoginPage() {
       {/* 로고 */}
       <div className="mb-12 text-center">
         <div className="text-5xl mb-4">⬡</div>
-        <h1 className="text-3xl font-black tracking-tight">LEVEL-UP</h1>
+        <h1 className="text-3xl font-black tracking-tight">AXIS</h1>
         <p className="text-sm text-gray-500 mt-1">2030 남성 자기관리 플랫폼</p>
       </div>
 
@@ -97,6 +107,19 @@ export default function LoginPage() {
               <path fill="#1976D2" d="M43.6 20.2H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C37.1 36.7 44 31 44 24c0-1.3-.1-2.6-.4-3.8z"/>
             </svg>
             Google로 시작하기
+          </button>
+
+          {/* 깃허브 로그인 */}
+          <button
+            onClick={handleGithub}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-50"
+            style={{ background: '#24292e', color: '#fff' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub로 시작하기
           </button>
 
           {/* 구분선 */}
