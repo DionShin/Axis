@@ -107,15 +107,28 @@ export default function OnboardingPage() {
     setError('');
     try {
       const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
-      if (signUpError) throw new Error(signUpError.message);
 
-      // 이메일 인증이 필요한 경우 (session이 null) — 인증 메일 안내
+      if (signUpError) {
+        const msg = signUpError.message.toLowerCase();
+        if (msg.includes('already registered') || msg.includes('already been registered')) {
+          throw new Error('이미 가입된 이메일입니다. 로그인 페이지로 이동해주세요.');
+        }
+        throw new Error(signUpError.message);
+      }
+
+      // 이메일 인증이 필요한 경우 (session이 null)
       if (!data.session) {
-        setError('');
-        // 인증 메일을 발송했으므로 메일 확인 안내 후 로그인 페이지로
-        alert('가입 확인 이메일을 보냈습니다.\n메일함에서 링크를 클릭한 후 로그인해주세요.');
-        window.location.href = '/login';
-        return;
+        // 이미 가입된 이메일인지 확인 (Supabase는 보안상 에러 대신 빈 세션 반환)
+        const { error: loginCheck } = await supabase.auth.signInWithPassword({ email, password });
+        if (!loginCheck) {
+          // 로그인 성공 = 이미 가입된 계정
+          router.push('/');
+          return;
+        }
+        if (loginCheck.message.includes('Email not confirmed')) {
+          throw new Error('가입 확인 이메일을 발송했습니다. 메일함을 확인한 후 로그인해주세요.');
+        }
+        throw new Error('이미 가입된 이메일입니다. 로그인 페이지로 이동해주세요.');
       }
 
       await onboardingAPI.saveProfile(nickname.trim());
