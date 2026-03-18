@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { onboardingAPI } from '@/lib/api';
@@ -78,6 +78,26 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // 이미 로그인된 상태면 step 1(회원가입) 건너뛰고 step 2(키워드)부터
+  // 프로필이 없으면 이메일로 기본 프로필 생성
+  useEffect(() => {
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) return;
+      setStep(2);
+      try {
+        const status = await onboardingAPI.getStatus();
+        if (!status.nickname) {
+          const email = data.session.user.email ?? '사용자';
+          const defaultNickname = email.split('@')[0];
+          await onboardingAPI.saveProfile(defaultNickname);
+          setNickname(defaultNickname);
+        } else {
+          setNickname(status.nickname);
+        }
+      } catch { /* 무시 */ }
+    });
+  }, []);
 
   // Step 1
   const [email, setEmail] = useState('');
