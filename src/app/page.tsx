@@ -1,9 +1,10 @@
 'use client';
 
-import { Bell, ChevronRight, Flame, TrendingUp, BookOpen, ExternalLink, Play } from 'lucide-react';
+import { Bell, ChevronRight, Flame, TrendingUp, BookOpen, ExternalLink, Play, LogOut } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import StatRadarChart from '@/components/StatRadarChart';
 import { statsAPI, routinesAPI, newsAPI, type StatResponse, type NewsArticle } from '@/lib/api';
+import { useAuth } from '@/lib/auth-context';
 
 // API 응답을 StatRadarChart가 기대하는 형태로 변환
 function toChartStat(s: StatResponse) {
@@ -112,6 +113,7 @@ function ShortsCard({ article }: { article: NewsArticle }) {
 
 // ─── 메인 대시보드 ────────────────────────────────────────────────
 export default function Dashboard() {
+  const { signOut } = useAuth();
   const { data: stats = [], isLoading: statsLoading } = useQuery({
     queryKey: ['stats'],
     queryFn: statsAPI.getAll,
@@ -167,7 +169,17 @@ export default function Dashboard() {
             <p className="text-[10px] text-gray-600 mb-0.5 tracking-widest uppercase">Your Level</p>
             <h2 className="text-2xl font-black italic text-blue-400">Lv.{level}</h2>
           </div>
-          <span className="text-xs text-gray-600">{xpCurrent} / 100 XP</span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-600">{xpCurrent} / 100 XP</span>
+            <button
+              onClick={signOut}
+              className="p-1.5 rounded-lg transition-all active:scale-95"
+              style={{ background: 'rgba(255,255,255,0.04)' }}
+              title="로그아웃"
+            >
+              <LogOut size={14} className="text-gray-600" />
+            </button>
+          </div>
         </div>
         <div className="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden">
           <div
