@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [magicSent, setMagicSent] = useState(false);
@@ -51,12 +51,11 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  // 이메일 + 비밀번호
-  const handleEmailAuth = async () => {
+  // 이메일 + 비밀번호 로그인
+  const handleEmailLogin = async () => {
     if (!email || !password) return;
     setLoading(true); setError('');
-    const fn = isSignUp ? supabase.auth.signUp : supabase.auth.signInWithPassword;
-    const { error } = await fn.call(supabase.auth, { email, password });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { setError(error.message); setLoading(false); }
     else router.push('/');
   };
@@ -106,7 +105,7 @@ export default function LoginPage() {
               <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.3 35.3 26.8 36 24 36c-5.2 0-9.7-3.4-11.3-8H6.4C9.6 37.3 16.3 44 24 44z"/>
               <path fill="#1976D2" d="M43.6 20.2H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C37.1 36.7 44 31 44 24c0-1.3-.1-2.6-.4-3.8z"/>
             </svg>
-            Google로 시작하기
+            Google로 로그인
           </button>
 
           {/* 깃허브 로그인 */}
@@ -119,7 +118,7 @@ export default function LoginPage() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
             </svg>
-            GitHub로 시작하기
+            GitHub로 로그인
           </button>
 
           {/* 구분선 */}
@@ -139,54 +138,46 @@ export default function LoginPage() {
             style={inputStyle}
           />
 
-          {/* 비밀번호 (선택적 표시) */}
-          {isSignUp && (
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="비밀번호 (8자 이상)"
-              className="w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-gray-600 outline-none"
-              style={inputStyle}
-            />
-          )}
+          {/* 비밀번호 입력 */}
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="비밀번호"
+            className="w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-gray-600 outline-none"
+            style={inputStyle}
+            onKeyDown={e => e.key === 'Enter' && handleEmailLogin()}
+          />
 
           {/* 에러 */}
           {error && <p className="text-xs text-red-400 text-center">{error}</p>}
 
-          {/* 매직링크 버튼 */}
-          {!isSignUp && (
-            <button
-              onClick={handleMagicLink}
-              disabled={!email || loading}
-              className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-              style={{ background: '#3b82f6', color: '#fff' }}
-            >
-              {loading ? '처리 중...' : '이메일 링크로 로그인'}
-            </button>
-          )}
+          {/* 이메일+비밀번호 로그인 버튼 */}
+          <button
+            onClick={handleEmailLogin}
+            disabled={!email || !password || loading}
+            className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
+            style={{ background: '#3b82f6', color: '#fff' }}
+          >
+            {loading ? '처리 중...' : '로그인'}
+          </button>
 
-          {/* 회원가입 버튼 */}
-          {isSignUp && (
-            <button
-              onClick={handleEmailAuth}
-              disabled={!email || !password || loading}
-              className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-              style={{ background: '#3b82f6', color: '#fff' }}
-            >
-              {loading ? '처리 중...' : '회원가입'}
-            </button>
-          )}
+          {/* 매직링크 */}
+          <button
+            onClick={handleMagicLink}
+            disabled={!email || loading}
+            className="w-full py-3 rounded-xl font-medium text-sm transition-all active:scale-[0.98] disabled:opacity-40 text-gray-400"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            이메일 링크로 로그인 (비밀번호 없이)
+          </button>
 
-          {/* 토글 */}
-          <p className="text-center text-xs text-gray-600">
-            {isSignUp ? '이미 계정이 있나요?' : '처음이신가요?'}{' '}
-            <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-blue-400 font-semibold"
-            >
-              {isSignUp ? '로그인' : '회원가입'}
-            </button>
+          {/* 회원가입 안내 */}
+          <p className="text-center text-xs text-gray-600 pt-1">
+            처음이신가요?{' '}
+            <Link href="/onboarding" className="text-blue-400 font-semibold">
+              회원가입
+            </Link>
           </p>
         </div>
       )}

@@ -91,6 +91,29 @@ export const communityAPI = {
     fetchAPI<{ like_count: number }>(`/community/${communityId}/like`, { method: 'POST' }),
 };
 
+// ─── Onboarding API ───────────────────────────────────────────────
+export const onboardingAPI = {
+  saveProfile: (nickname: string) =>
+    fetchAPI<{ message: string; nickname: string }>('/onboarding/profile', {
+      method: 'POST',
+      body: JSON.stringify({ nickname }),
+    }),
+  saveKeywords: (keywords: string[]) =>
+    fetchAPI<{ message: string; created_categories: string[]; created_routines: string[] }>(
+      '/onboarding/keywords',
+      { method: 'POST', body: JSON.stringify({ keywords }) }
+    ),
+  saveSNS: (data: { instagram_id?: string; kakao_id?: string; phone?: string }) =>
+    fetchAPI<{ message: string }>('/onboarding/sns', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  complete: () =>
+    fetchAPI<{ message: string }>('/onboarding/complete', { method: 'POST' }),
+  getStatus: () =>
+    fetchAPI<{ completed: boolean; nickname: string }>('/onboarding/status'),
+};
+
 // ─── News API ─────────────────────────────────────────────────────
 export const newsAPI = {
   getAll: (category?: 'economy' | 'knowledge' | 'shorts' | 'all', pageSize = 10) =>

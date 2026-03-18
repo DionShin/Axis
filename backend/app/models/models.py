@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime, date as _date
 from typing import Optional
 
-from sqlalchemy import JSON, Date, ForeignKey, String, Text, func
+from sqlalchemy import JSON, Boolean, Date, ForeignKey, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -16,6 +16,19 @@ from app.core.database import Base
 
 def gen_uuid() -> str:
     return str(uuid.uuid4())
+
+
+# ─── UserProfile (온보딩) ──────────────────────────────────────────
+class UserProfile(Base):
+    __tablename__ = "user_profiles"
+
+    user_id: Mapped[str] = mapped_column(String, primary_key=True)
+    nickname: Mapped[str] = mapped_column(String(50), nullable=False, default="익명")
+    instagram_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    kakao_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    phone: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    onboarding_completed: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
 
 
 # ─── Stats (L1) ───────────────────────────────────────────────────

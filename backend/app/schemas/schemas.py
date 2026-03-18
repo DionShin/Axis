@@ -154,3 +154,20 @@ class DashboardResponse(BaseModel):
     stats: list[StatResponse]
     today_routines: list[RoutineResponse]
     upcoming_notification: Optional[RoutineResponse] = None
+
+
+# ─── 온보딩 ───────────────────────────────────────────────────────
+class OnboardingProfileRequest(BaseModel):
+    nickname: str
+
+class OnboardingKeywordsRequest(BaseModel):
+    keywords: list[str]
+
+class OnboardingSNSRequest(BaseModel):
+    instagram_id: Optional[str] = None
+    kakao_id: Optional[str] = None
+    phone: Optional[str] = None
+
+class OnboardingStatusResponse(BaseModel):
+    completed: bool
+    nickname: str

@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.routers import stats, categories, routines, logs, history, community, push, news
+from app.routers import stats, categories, routines, logs, history, community, push, news, onboarding
 from app.services.scheduler import start_scheduler, stop_scheduler
 
 
@@ -53,6 +53,7 @@ app.include_router(history.router,    prefix="/api")
 app.include_router(community.router,  prefix="/api")
 app.include_router(push.router,       prefix="/api")
 app.include_router(news.router,       prefix="/api")
+app.include_router(onboarding.router, prefix="/api")
 
 
 @app.get("/")
