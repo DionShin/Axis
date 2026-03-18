@@ -5,7 +5,7 @@
  * 파이썬의 전역 변수처럼 쓰되, React의 구독 방식으로 리렌더링 트리거.
  */
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import { onboardingAPI } from './api';
@@ -26,12 +26,13 @@ const SKIP_ONBOARDING_CHECK = ['/login', '/onboarding', '/auth/callback'];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   // 로그인 후 온보딩 완료 여부 확인 → 미완료면 /onboarding으로
-  const checkOnboarding = async (currentPath: string) => {
+  // window.location.pathname 사용 — 클로저 캡처 문제 방지
+  const checkOnboarding = async () => {
+    const currentPath = window.location.pathname;
     if (SKIP_ONBOARDING_CHECK.some(p => currentPath.startsWith(p))) return;
     try {
       const status = await onboardingAPI.getStatus();
@@ -46,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
       setLoading(false);
-      if (data.session?.user) checkOnboarding(pathname);
+      if (data.session?.user) checkOnboarding();
     });
 
     // 로그인/로그아웃 이벤트 구독
@@ -55,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!session) {
         router.push('/login');
       } else if (event === 'SIGNED_IN') {
-        checkOnboarding(pathname);
+        checkOnboarding();
       }
     });
 
