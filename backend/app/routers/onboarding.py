@@ -152,6 +152,16 @@ async def get_onboarding_status(
     )
 
 
+# 신규 유저에게 생성할 기본 스탯 5개
+DEFAULT_STATS = [
+    {"name": "외모", "icon": "💪", "color": "#3b82f6"},
+    {"name": "매너", "icon": "🎯", "color": "#8b5cf6"},
+    {"name": "체력", "icon": "⚡", "color": "#ef4444"},
+    {"name": "지성", "icon": "📚", "color": "#f59e0b"},
+    {"name": "자산", "icon": "💰", "color": "#10b981"},
+]
+
+
 # ─── POST /onboarding/profile ─────────────────────────────────────
 @router.post("/profile", response_model=dict, status_code=201)
 async def save_profile(
@@ -159,7 +169,8 @@ async def save_profile(
     db: AsyncSession = Depends(get_db),
     user_id: str = Depends(get_current_user_id),
 ):
-    """닉네임 저장 및 user_profile 행 생성(없으면) 또는 업데이트."""
+    """닉네임 저장 및 user_profile 행 생성(없으면) 또는 업데이트.
+    신규 유저라면 기본 스탯 5개(외모/매너/체력/지성/자산)도 함께 생성."""
     result = await db.execute(
         select(UserProfile).where(UserProfile.user_id == user_id)
     )
@@ -170,6 +181,19 @@ async def save_profile(
     else:
         profile = UserProfile(user_id=user_id, nickname=body.nickname)
         db.add(profile)
+
+        # 신규 유저 — 기본 스탯 생성 (없는 것만)
+        for stat_data in DEFAULT_STATS:
+            existing = await db.execute(
+                select(Stat).where(Stat.user_id == user_id, Stat.name == stat_data["name"])
+            )
+            if not existing.scalar_one_or_none():
+                db.add(Stat(
+                    user_id=user_id,
+                    name=stat_data["name"],
+                    icon=stat_data["icon"],
+                    color=stat_data["color"],
+                ))
 
     await db.commit()
     return {"message": "프로필이 저장되었습니다.", "nickname": body.nickname}
