@@ -106,8 +106,18 @@ export default function OnboardingPage() {
     setLoading(true);
     setError('');
     try {
-      const { error: signUpError } = await supabase.auth.signUp({ email, password });
+      const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
       if (signUpError) throw new Error(signUpError.message);
+
+      // 이메일 인증이 필요한 경우 (session이 null) — 인증 메일 안내
+      if (!data.session) {
+        setError('');
+        // 인증 메일을 발송했으므로 메일 확인 안내 후 로그인 페이지로
+        alert('가입 확인 이메일을 보냈습니다.\n메일함에서 링크를 클릭한 후 로그인해주세요.');
+        window.location.href = '/login';
+        return;
+      }
+
       await onboardingAPI.saveProfile(nickname.trim());
       setStep(2);
     } catch (e: unknown) {
