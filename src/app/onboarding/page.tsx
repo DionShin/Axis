@@ -228,7 +228,8 @@ export default function OnboardingPage() {
         }
       }
       await onboardingAPI.complete();
-      router.push('/');
+      await supabase.auth.signOut();
+      router.push('/login');
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : '오류가 발생했습니다.');
     } finally {
