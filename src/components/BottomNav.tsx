@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { href: '/profile',    label: '프로필',  icon: User      },
 ];
 
-const HIDE_NAV = ['/login', '/onboarding', '/auth'];
+const HIDE_NAV = ['/login', '/onboarding', '/auth', '/onboarding/nickname'];
 
 export default function BottomNav() {
   const pathname = usePathname();

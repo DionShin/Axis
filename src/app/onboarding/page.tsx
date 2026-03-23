@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { onboardingAPI } from '@/lib/api';
 
@@ -75,28 +75,17 @@ const inputStyle = {
 // ─── 메인 컴포넌트 ────────────────────────────────────────────────
 export default function OnboardingPage() {
   const router = useRouter();
-  const [step, setStep] = useState(1);
+  const searchParams = useSearchParams();
+  const fromOAuth = searchParams.get('from') === 'oauth';
+  const [step, setStep] = useState(fromOAuth ? 2 : 1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [isOAuthFlow, setIsOAuthFlow] = useState(false);
-  const [sessionChecked, setSessionChecked] = useState(false);
 
   useEffect(() => {
+    if (!fromOAuth) return;
+    // OAuth 유저: 이미 프로필 있음, 완료 여부만 체크
     supabase.auth.getSession().then(async ({ data }) => {
-      if (!data.session) {
-        setSessionChecked(true);
-        return;
-      }
-      try {
-        const status = await onboardingAPI.getStatus();
-        if (status.completed) {
-          router.replace('/');
-          return;
-        }
-        setIsOAuthFlow(true);
-        if (status.nickname) setNickname(status.nickname);
-      } catch { /* 무시 */ }
-      setSessionChecked(true);
+      if (!data.session) { router.replace('/login'); return; }
     });
   }, []);
 
@@ -120,21 +109,6 @@ export default function OnboardingPage() {
     pwCheck.number &&
     pwCheck.special &&
     nickname.trim().length > 0;
-
-  // ── Step 1 (OAuth): 닉네임만 저장 후 step 2로 ────────────────────
-  const handleOAuthNickname = async () => {
-    if (!nickname.trim()) return;
-    setLoading(true);
-    setError('');
-    try {
-      await onboardingAPI.saveProfile(nickname.trim());
-      setStep(2);
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : '오류가 발생했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // ── Step 1: 회원가입 ─────────────────────────────────────────────
   const handleStep1 = async () => {
@@ -244,7 +218,7 @@ export default function OnboardingPage() {
         }
       }
       await onboardingAPI.complete();
-      if (isOAuthFlow) {
+      if (fromOAuth) {
         router.push('/');
       } else {
         await supabase.auth.signOut();
@@ -264,14 +238,6 @@ export default function OnboardingPage() {
     </span>
   );
 
-  if (!sessionChecked) {
-    return (
-      <main className="min-h-screen bg-[#0a0a0c] flex items-center justify-center">
-        <div className="text-gray-600 text-sm animate-pulse">Loading...</div>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-[#0a0a0c] text-white flex flex-col items-center justify-center px-6 py-12">
 
@@ -283,8 +249,8 @@ export default function OnboardingPage() {
 
       <StepDots current={step} total={4} />
 
-      {/* ── STEP 1: 계정 만들기 (이메일) or 닉네임 입력 (OAuth) ────── */}
-      {step === 1 && !isOAuthFlow && (
+      {/* ── STEP 1: 계정 만들기 ─────────────────────────────────── */}
+      {step === 1 && (
         <div className="w-full max-w-sm space-y-4">
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold">계정 만들기</h2>
@@ -348,35 +314,6 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {/* ── STEP 1 (OAuth): 닉네임만 입력 ───────────────────────────── */}
-      {step === 1 && isOAuthFlow && (
-        <div className="w-full max-w-sm space-y-4">
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold">닉네임 설정</h2>
-            <p className="text-sm text-gray-500 mt-1">앱에서 표시될 이름을 입력해주세요</p>
-          </div>
-
-          <input
-            type="text"
-            value={nickname}
-            onChange={e => setNickname(e.target.value)}
-            placeholder="닉네임"
-            className="w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-gray-600 outline-none"
-            style={inputStyle}
-          />
-
-          {error && <p className="text-xs text-red-400 text-center">{error}</p>}
-
-          <button
-            onClick={handleOAuthNickname}
-            disabled={!nickname.trim() || loading}
-            className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-            style={{ background: '#3b82f6', color: '#fff' }}
-          >
-            {loading ? '처리 중...' : '다음'}
-          </button>
-        </div>
-      )}
 
       {/* ── STEP 2: 관심사 선택 ─────────────────────────────────── */}
       {step === 2 && (
