@@ -9,8 +9,10 @@ interface Props {
 }
 
 const SIZE = 300;
-const CX = SIZE / 2;
-const CY = SIZE / 2;
+const PAD = 40;       // 라벨 여백
+const TOTAL = SIZE + PAD * 2;
+const CX = TOTAL / 2;
+const CY = TOTAL / 2;
 const R = 100;        // 최대 반지름
 const LABEL_R = 132;  // 라벨 반지름
 
@@ -62,7 +64,7 @@ export default function StatRadarChart({ stats }: Props) {
 
   return (
     <svg
-      viewBox={`0 0 ${SIZE} ${SIZE}`}
+      viewBox={`0 0 ${TOTAL} ${TOTAL}`}
       width="100%"
       height="100%"
       style={{ display: 'block' }}

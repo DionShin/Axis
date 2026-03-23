@@ -27,6 +27,7 @@ async function fetchAPI<T>(path: string, options?: RequestInit): Promise<T> {
     const err = await res.json().catch(() => ({ detail: 'Unknown error' }));
     throw new Error(err.detail ?? `API Error ${res.status}`);
   }
+  if (res.status === 204 || res.headers.get('content-length') === '0') return undefined as T;
   return res.json();
 }
 
