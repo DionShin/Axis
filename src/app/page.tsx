@@ -234,22 +234,37 @@ export default function Dashboard() {
       </section>
 
       {/* 스탯 미니 진행바 */}
-      <section className="mb-7 grid grid-cols-5 gap-2">
-        {stats.map(stat => (
-          <div key={stat.id} className="flex flex-col items-center gap-1.5">
-            <span className="text-sm">{stat.icon}</span>
-            <div className="w-full h-0.5 rounded-full bg-gray-800 overflow-hidden">
+      {(() => {
+        const n = stats.length;
+        // 6개 이상이면 두 줄: 위 4개 + 나머지
+        const rows = n <= 5 ? [stats] : [stats.slice(0, 4), stats.slice(4)];
+        return (
+          <section className="mb-7 space-y-2">
+            {rows.map((row, ri) => (
               <div
-                className="h-full rounded-full"
-                style={{ width: `${stat.score}%`, background: stat.color }}
-              />
-            </div>
-            <span className="text-[10px] font-bold" style={{ color: stat.color }}>
-              {Math.round(stat.score)}
-            </span>
-          </div>
-        ))}
-      </section>
+                key={ri}
+                className="grid gap-2"
+                style={{ gridTemplateColumns: `repeat(${row.length}, 1fr)` }}
+              >
+                {row.map(stat => (
+                  <div key={stat.id} className="flex flex-col items-center gap-1.5">
+                    <span className="text-sm">{stat.icon}</span>
+                    <div className="w-full h-0.5 rounded-full bg-gray-800 overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{ width: `${stat.score}%`, background: stat.color }}
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold" style={{ color: stat.color }}>
+                      {Math.round(stat.score)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </section>
+        );
+      })()}
 
       {/* 오늘의 루틴 */}
       <section className="space-y-3 pb-6">
