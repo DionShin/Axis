@@ -222,13 +222,7 @@ export default function Dashboard() {
             편집
           </button>
         </div>
-        <div
-          className="w-full aspect-square rounded-[2rem] flex items-center justify-center"
-          style={{
-            background: 'linear-gradient(145deg, #0f1117, #0a0a0c)',
-            border: '1px solid rgba(255,255,255,0.05)',
-          }}
-        >
+        <div className="w-full">
           <StatRadarChart stats={stats.map(toChartStat)} />
         </div>
       </section>

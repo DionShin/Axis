@@ -98,7 +98,7 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
               key={s}
               className="w-2 h-2 rounded-full transition-all"
               style={{
-                background: step >= s ? '#3b82f6' : 'rgba(255,255,255,0.12)',
+                background: step >= s ? '#ffffff' : 'rgba(255,255,255,0.12)',
                 width: step === s ? '20px' : '8px',
               }}
             />
@@ -120,9 +120,9 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
                   className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left transition-all active:scale-[0.98]"
                   style={{
                     background: selectedRoutine?.id === routine.id
-                      ? 'rgba(59,130,246,0.15)'
+                      ? 'rgba(255,255,255,0.15)'
                       : 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${selectedRoutine?.id === routine.id ? 'rgba(59,130,246,0.4)' : 'transparent'}`,
+                    border: `1px solid ${selectedRoutine?.id === routine.id ? 'rgba(255,255,255,0.4)' : 'transparent'}`,
                   }}
                 >
                   <div>
@@ -135,7 +135,7 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
                     </p>
                   </div>
                   {selectedRoutine?.id === routine.id && (
-                    <Check size={16} className="text-blue-400 shrink-0" />
+                    <Check size={16} className="text-white shrink-0" />
                   )}
                 </button>
               ))}
@@ -145,7 +145,7 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
               onClick={() => selectedRoutine && setStep(2)}
               disabled={!selectedRoutine}
               className="w-full py-3.5 rounded-xl text-sm font-black transition-all active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2"
-              style={{ background: '#3b82f6', color: '#fff' }}
+              style={{ background: '#ffffff', color: '#fff' }}
             >
               다음 <ChevronRight size={16} />
             </button>
@@ -158,9 +158,9 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
             {/* 선택된 루틴 미리보기 */}
             <div
               className="px-4 py-3 rounded-xl"
-              style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.2)' }}
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)' }}
             >
-              <p className="text-xs text-blue-400 font-semibold">{selectedRoutine.name}</p>
+              <p className="text-xs text-white font-semibold">{selectedRoutine.name}</p>
               <p className="text-[10px] text-gray-500 mt-0.5">
                 {FREQ_LABEL[selectedRoutine.frequency] ?? selectedRoutine.frequency}
               </p>
@@ -192,10 +192,10 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
                     className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95"
                     style={{
                       background: selectedTags.includes(tag)
-                        ? 'rgba(59,130,246,0.2)'
+                        ? 'rgba(255,255,255,0.2)'
                         : 'rgba(255,255,255,0.05)',
-                      color: selectedTags.includes(tag) ? '#60a5fa' : '#6b7280',
-                      border: `1px solid ${selectedTags.includes(tag) ? 'rgba(59,130,246,0.4)' : 'transparent'}`,
+                      color: selectedTags.includes(tag) ? '#ffffff' : '#6b7280',
+                      border: `1px solid ${selectedTags.includes(tag) ? 'rgba(255,255,255,0.4)' : 'transparent'}`,
                     }}
                   >
                     #{tag}
@@ -215,7 +215,7 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
               <button
                 onClick={() => setStep(3)}
                 className="flex-[2] py-3.5 rounded-xl text-sm font-black transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                style={{ background: '#3b82f6', color: '#fff' }}
+                style={{ background: '#ffffff', color: '#fff' }}
               >
                 다음 <ChevronRight size={16} />
               </button>
@@ -235,7 +235,7 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
               <div className="flex items-center gap-2 mb-1">
                 <div
                   className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{ background: 'rgba(59,130,246,0.2)', color: '#60a5fa' }}
+                  style={{ background: 'rgba(255,255,255,0.2)', color: '#ffffff' }}
                 >
                   익
                 </div>
@@ -285,7 +285,7 @@ export default function ShareRoutineSheet({ open, onClose }: Props) {
                 onClick={handleSubmit}
                 disabled={mutation.isPending}
                 className="flex-[2] py-3.5 rounded-xl text-sm font-black transition-all active:scale-[0.98] disabled:opacity-40"
-                style={{ background: '#3b82f6', color: '#fff' }}
+                style={{ background: '#ffffff', color: '#fff' }}
               >
                 {mutation.isPending ? '공유 중...' : '커뮤니티에 공유하기'}
               </button>

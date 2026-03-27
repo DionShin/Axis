@@ -110,18 +110,18 @@ export default function ProfilePage() {
         className="rounded-2xl p-5 mb-6"
         style={{
           background: 'linear-gradient(135deg, #1e3a5f 0%, #0f1117 60%)',
-          border: '1px solid rgba(59,130,246,0.2)',
+          border: '1px solid rgba(255,255,255,0.2)',
         }}
       >
         <div className="flex items-center gap-4 mb-4">
           <div
             className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black shrink-0"
-            style={{ background: 'rgba(59,130,246,0.15)' }}
+            style={{ background: 'rgba(255,255,255,0.15)' }}
           >
             🧑
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] text-blue-400 font-semibold tracking-wider mb-0.5">LEVEL {level}</p>
+            <p className="text-[11px] text-white font-semibold tracking-wider mb-0.5">LEVEL {level}</p>
             {/* 닉네임 인라인 편집 */}
             {nicknameLoading ? (
               <div className="h-7 w-32 bg-gray-800 rounded animate-pulse" />
@@ -133,10 +133,10 @@ export default function ProfilePage() {
                   onChange={e => setDraftName(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && confirmEdit()}
                   maxLength={20}
-                  className="bg-transparent border-b border-blue-400 text-xl font-black outline-none w-36 text-white"
+                  className="bg-transparent border-b border-white text-xl font-black outline-none w-36 text-white"
                 />
                 <button onClick={confirmEdit}>
-                  <Check size={16} className="text-blue-400" />
+                  <Check size={16} className="text-white" />
                 </button>
               </div>
             ) : (
@@ -161,7 +161,7 @@ export default function ProfilePage() {
         </div>
         <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-all duration-700"
+            className="h-full rounded-full bg-gradient-to-r from-white to-gray-400 transition-all duration-700"
             style={{ width: `${xpCurrent}%` }}
           />
         </div>
@@ -194,7 +194,7 @@ export default function ProfilePage() {
         {[
           { icon: <Flame size={20} className="text-orange-400" />, value: `${totalStreak}일`, label: '최장 스트릭', bg: 'rgba(251,146,60,0.1)' },
           { icon: <Trophy size={20} className="text-yellow-400" />, value: `${habitsFormed}개`, label: '정착한 습관', bg: 'rgba(251,191,36,0.1)' },
-          { icon: <Target size={20} className="text-blue-400" />,   value: `${todayRoutines.length}개`, label: '오늘 루틴', bg: 'rgba(59,130,246,0.1)' },
+          { icon: <Target size={20} className="text-white" />,   value: `${todayRoutines.length}개`, label: '오늘 루틴', bg: 'rgba(255,255,255,0.1)' },
         ].map(item => (
           <div
             key={item.label}
@@ -220,7 +220,7 @@ export default function ProfilePage() {
           style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
         >
           {pushEnabled
-            ? <Bell size={16} className="text-blue-400" />
+            ? <Bell size={16} className="text-white" />
             : <BellOff size={16} className="text-gray-400" />
           }
           <span className="text-sm flex-1 text-left">

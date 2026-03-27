@@ -82,7 +82,7 @@ export default function CategoryDetailPage() {
     );
   }
 
-  const statColor = stat?.color ?? '#3b82f6';
+  const statColor = stat?.color ?? '#ffffff';
   const today = new Date().toISOString().split('T')[0];
 
   return (

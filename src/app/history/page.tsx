@@ -7,7 +7,7 @@ import type { HistoryEventType } from '@/lib/types';
 
 // 이벤트 타입별 아이콘, 라벨, 색상
 const EVENT_META: Record<HistoryEventType, { icon: string; label: string; color: string }> = {
-  routine_added:   { icon: '➕', label: '루틴 시작',      color: '#60a5fa' },
+  routine_added:   { icon: '➕', label: '루틴 시작',      color: '#ffffff' },
   routine_deleted: { icon: '🗑️', label: '루틴 삭제',      color: '#f87171' },
   habit_formed:    { icon: '🏆', label: '습관 정착',      color: '#fbbf24' },
   forked:          { icon: '🔀', label: '루틴 복제',      color: '#a78bfa' },
@@ -58,7 +58,7 @@ export default function HistoryPage() {
         {[
           { label: '정착한 습관', value: history.filter(h => h.event_type === 'habit_formed').length, color: '#fbbf24', icon: '🏆' },
           { label: '복제한 루틴', value: history.filter(h => h.event_type === 'forked').length,       color: '#a78bfa', icon: '🔀' },
-          { label: '시작한 루틴', value: history.filter(h => h.event_type === 'routine_added').length, color: '#60a5fa', icon: '➕' },
+          { label: '시작한 루틴', value: history.filter(h => h.event_type === 'routine_added').length, color: '#ffffff', icon: '➕' },
         ].map(item => (
           <div
             key={item.label}

@@ -9,7 +9,7 @@ interface Props {
 }
 
 // 요일별 O/X 도트 (이번 주 7일 표시)
-export default function WeeklyDots({ logs, color = '#3b82f6' }: Props) {
+export default function WeeklyDots({ logs, color = '#ffffff' }: Props) {
   const weekDates = getWeekDates();
   const logMap = new Map(logs.map(l => [l.date, l.completed]));
   const today = new Date().toISOString().split('T')[0];

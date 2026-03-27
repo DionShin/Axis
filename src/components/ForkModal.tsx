@@ -89,7 +89,7 @@ export default function ForkModal({ routine, onClose }: Props) {
             <button onClick={() => setStep(1)} className="text-xs text-gray-500">← 스탯 변경</button>
             <span
               className="text-xs px-2 py-0.5 rounded-full font-semibold"
-              style={{ background: (selectedStat?.color ?? '#3b82f6') + '22', color: selectedStat?.color }}
+              style={{ background: (selectedStat?.color ?? '#ffffff') + '22', color: selectedStat?.color }}
             >
               {selectedStat?.icon} {selectedStat?.name}
             </span>
@@ -153,7 +153,7 @@ export default function ForkModal({ routine, onClose }: Props) {
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
             className="w-full py-3.5 rounded-xl text-sm font-black flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-40"
-            style={{ background: '#3b82f6', color: '#fff' }}
+            style={{ background: '#ffffff', color: '#fff' }}
           >
             <GitFork size={15} />
             {mutation.isPending ? '추가 중...' : '내 플랜에 추가하기'}

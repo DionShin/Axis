@@ -9,12 +9,12 @@ interface Props {
 }
 
 const SIZE = 300;
-const PAD = 40;       // 라벨 여백
+const PAD = 50;       // 라벨 여백
 const TOTAL = SIZE + PAD * 2;
 const CX = TOTAL / 2;
 const CY = TOTAL / 2;
-const R = 100;        // 최대 반지름
-const LABEL_R = 132;  // 라벨 반지름
+const R = 125;        // 최대 반지름
+const LABEL_R = 162;  // 라벨 반지름
 
 // n각형 꼭짓점 좌표 계산 (12시 방향부터 시계방향)
 function getVertices(n: number, r: number, cx = CX, cy = CY) {

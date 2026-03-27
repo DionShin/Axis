@@ -54,7 +54,7 @@ export default function CommunityPage() {
         <button
           onClick={() => setShareOpen(true)}
           className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 mt-1"
-          style={{ background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}
+          style={{ background: 'rgba(255,255,255,0.15)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.3)' }}
         >
           <Share2 size={13} />
           공유하기
@@ -92,7 +92,7 @@ export default function CommunityPage() {
             onClick={() => setSelectedTag(tag)}
             className="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
             style={{
-              background: selectedTag === tag ? '#3b82f6' : 'rgba(255,255,255,0.05)',
+              background: selectedTag === tag ? '#ffffff' : 'rgba(255,255,255,0.05)',
               color: selectedTag === tag ? '#fff' : '#6b7280',
             }}
           >
@@ -138,7 +138,7 @@ export default function CommunityPage() {
                 <div className="flex items-center gap-2">
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                    style={{ background: (stat?.color ?? '#3b82f6') + '22', color: stat?.color ?? '#3b82f6' }}
+                    style={{ background: (stat?.color ?? '#ffffff') + '22', color: stat?.color ?? '#ffffff' }}
                   >
                     {routine.author_name[0]}
                   </div>
@@ -149,7 +149,7 @@ export default function CommunityPage() {
                 </div>
                 <div
                   className="px-2 py-1 rounded-full text-[10px] font-semibold"
-                  style={{ background: (stat?.color ?? '#3b82f6') + '18', color: stat?.color ?? '#3b82f6' }}
+                  style={{ background: (stat?.color ?? '#ffffff') + '18', color: stat?.color ?? '#ffffff' }}
                 >
                   {stat?.icon} {routine.category_name}
                 </div>
@@ -198,9 +198,9 @@ export default function CommunityPage() {
                   }}
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95"
                   style={{
-                    background: isForked ? (stat?.color ?? '#3b82f6') + '33' : 'rgba(255,255,255,0.05)',
-                    color: isForked ? (stat?.color ?? '#3b82f6') : '#6b7280',
-                    border: `1px solid ${isForked ? (stat?.color ?? '#3b82f6') + '44' : 'transparent'}`,
+                    background: isForked ? (stat?.color ?? '#ffffff') + '33' : 'rgba(255,255,255,0.05)',
+                    color: isForked ? (stat?.color ?? '#ffffff') : '#6b7280',
+                    border: `1px solid ${isForked ? (stat?.color ?? '#ffffff') + '44' : 'transparent'}`,
                   }}
                 >
                   <GitFork size={14} />
