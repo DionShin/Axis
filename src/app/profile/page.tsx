@@ -229,7 +229,7 @@ export default function ProfilePage() {
           {/* 토글 스위치 */}
           <div
             className="w-10 h-5 rounded-full transition-colors duration-200 relative"
-            style={{ background: pushEnabled ? '#3b82f6' : 'rgba(255,255,255,0.1)' }}
+            style={{ background: pushEnabled ? '#ffffff' : 'rgba(255,255,255,0.1)' }}
           >
             <div
               className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all duration-200"

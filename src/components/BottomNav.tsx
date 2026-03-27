@@ -19,17 +19,23 @@ export default function BottomNav() {
   if (HIDE_NAV.some(p => pathname.startsWith(p))) return null;
 
   return (
-    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[480px] bg-[#0f1117]/95 backdrop-blur-md border border-white/8 rounded-2xl z-50">
+    <nav
+      className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[92%] max-w-[480px] rounded-2xl z-50"
+      style={{
+        background: 'rgba(10,10,12,0.92)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(255,255,255,0.06)',
+      }}
+    >
       <div className="flex">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-          // 홈은 정확히 '/'일 때만, 나머지는 시작 경로 포함
           const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
           return (
             <Link
               key={href}
               href={href}
-              className={`flex-1 flex flex-col items-center gap-1.5 py-4 transition-colors ${
-                isActive ? 'text-blue-400' : 'text-gray-600'
+              className={`flex-1 flex flex-col items-center gap-1.5 py-3.5 transition-colors ${
+                isActive ? 'text-white' : 'text-gray-600'
               }`}
             >
               <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />

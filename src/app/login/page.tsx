@@ -89,7 +89,7 @@ export default function LoginPage() {
           <div className="text-4xl mb-3">📬</div>
           <h2 className="font-bold mb-2">이메일을 확인하세요</h2>
           <p className="text-sm text-gray-400">
-            <span className="text-blue-400">{email}</span>로<br />
+            <span className="text-white">{email}</span>로<br />
             로그인 링크를 발송했습니다.
           </p>
           <button onClick={() => setMagicSent(false)} className="mt-4 text-xs text-gray-600 underline">
@@ -173,7 +173,7 @@ export default function LoginPage() {
             onClick={handleEmailLogin}
             disabled={!email || !password || loading}
             className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-            style={{ background: '#3b82f6', color: '#fff' }}
+            style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
           >
             {loading ? '처리 중...' : '로그인'}
           </button>
@@ -189,7 +189,7 @@ export default function LoginPage() {
 
           <p className="text-center text-xs text-gray-600 pt-1">
             처음이신가요?{' '}
-            <Link href="/onboarding" className="text-blue-400 font-semibold">
+            <Link href="/onboarding" className="text-white font-semibold">
               회원가입
             </Link>
           </p>

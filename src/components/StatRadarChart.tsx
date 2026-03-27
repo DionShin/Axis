@@ -95,9 +95,9 @@ export default function StatRadarChart({ stats }: Props) {
       {/* ── 데이터 영역 ── */}
       <path
         d={dataPath}
-        fill="#3b82f6"
-        fillOpacity={0.25}
-        stroke="#3b82f6"
+        fill="#ffffff"
+        fillOpacity={0.08}
+        stroke="#ffffff"
         strokeWidth={1.5}
         strokeLinejoin="round"
         style={{
@@ -115,7 +115,7 @@ export default function StatRadarChart({ stats }: Props) {
             key={i}
             cx={px} cy={py}
             r={3}
-            fill="#60a5fa"
+            fill="#ffffff"
             style={{ transition: 'all 0.4s ease' }}
           />
         );

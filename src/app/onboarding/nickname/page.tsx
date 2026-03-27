@@ -85,7 +85,7 @@ export default function NicknamePage() {
           onClick={handleNext}
           disabled={!nickname.trim() || loading}
           className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-          style={{ background: '#3b82f6', color: '#fff' }}
+          style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
         >
           {loading ? '처리 중...' : '다음'}
         </button>

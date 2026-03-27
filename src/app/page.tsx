@@ -188,7 +188,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-end mb-2">
           <div>
             <p className="text-[10px] text-gray-600 mb-0.5 tracking-widest uppercase">Your Level</p>
-            <h2 className="text-2xl font-black italic text-blue-400">Lv.{level}</h2>
+            <h2 className="text-2xl font-black italic text-white">Lv.{level}</h2>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-600">{xpCurrent} / 100 XP</span>
@@ -204,7 +204,7 @@ export default function Dashboard() {
         </div>
         <div className="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-all duration-700"
+            className="h-full rounded-full bg-gradient-to-r from-white to-gray-400 transition-all duration-700"
             style={{ width: `${xpCurrent}%` }}
           />
         </div>
@@ -216,8 +216,8 @@ export default function Dashboard() {
           <p className="text-[10px] text-gray-600 tracking-wider">꼭짓점을 탭해서 스탯 관리</p>
           <button
             onClick={() => { setStatSheetOpen(true); setStatError(''); }}
-            className="text-[10px] text-blue-400 font-semibold px-2 py-0.5 rounded-full"
-            style={{ background: 'rgba(59,130,246,0.1)' }}
+            className="text-[10px] text-white font-semibold px-2 py-0.5 rounded-full"
+            style={{ background: 'rgba(255,255,255,0.08)' }}
           >
             편집
           </button>
@@ -270,22 +270,22 @@ export default function Dashboard() {
       <section className="space-y-3 pb-6">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-gray-300">오늘의 루틴</h3>
-          <span className="text-xs text-blue-400">{todayRoutines.length}개 예정</span>
+          <span className="text-xs text-gray-400">{todayRoutines.length}개 예정</span>
         </div>
 
         {/* 다음 알림 */}
         {upcomingRoutine && (
           <div
             className="rounded-2xl p-4 flex gap-3 items-start"
-            style={{ background: '#0f1117', border: '1px solid rgba(59,130,246,0.2)' }}
+            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.08)' }}
           >
             <div className="rounded-xl p-2 mt-0.5 shrink-0" style={{ background: 'rgba(59,130,246,0.1)' }}>
-              <Bell size={15} className="text-blue-400" />
+              <Bell size={15} className="text-white" />
             </div>
             <div>
               <p className="text-[11px] text-gray-500 mb-0.5">오늘 {upcomingRoutine.notification_time}</p>
               <p className="text-sm font-semibold">
-                <span className="text-blue-400">'{upcomingRoutine.name}'</span> 루틴 예정
+                <span className="text-white">'{upcomingRoutine.name}'</span> 루틴 예정
               </p>
             </div>
           </div>
@@ -419,7 +419,7 @@ export default function Dashboard() {
                       className="w-9 h-9 rounded-xl text-lg transition-all"
                       style={{
                         background: newStatIcon === emoji ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.05)',
-                        border: newStatIcon === emoji ? '1px solid #3b82f6' : '1px solid transparent',
+                        border: newStatIcon === emoji ? '1px solid rgba(255,255,255,0.6)' : '1px solid transparent',
                       }}
                     >
                       {emoji}
@@ -459,7 +459,7 @@ export default function Dashboard() {
                   onClick={() => createStatMutation.mutate()}
                   disabled={!newStatName.trim() || createStatMutation.isPending}
                   className="w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-                  style={{ background: '#3b82f6', color: '#fff' }}
+                  style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
                 >
                   {createStatMutation.isPending ? '추가 중...' : `${newStatIcon} ${newStatName || '스탯'} 추가`}
                 </button>

@@ -53,7 +53,7 @@ function StepDots({ current, total }: { current: number; total: number }) {
           className="h-2 rounded-full transition-all duration-300"
           style={{
             width: i + 1 === current ? '24px' : '8px',
-            background: i + 1 === current ? '#3b82f6' : 'rgba(255,255,255,0.15)',
+            background: i + 1 === current ? '#ffffff' : 'rgba(255,255,255,0.15)',
           }}
         />
       ))}
@@ -236,7 +236,7 @@ export default function OnboardingPage() {
 
   // ── 체크 아이콘 ─────────────────────────────────────────────────
   const Check = ({ ok }: { ok: boolean }) => (
-    <span style={{ color: ok ? '#3b82f6' : 'rgba(255,255,255,0.25)' }}>
+    <span style={{ color: ok ? '#ffffff' : 'rgba(255,255,255,0.25)' }}>
       {ok ? '✓' : '✗'}
     </span>
   );
@@ -313,14 +313,14 @@ export default function OnboardingPage() {
             onClick={handleStep1}
             disabled={!step1Valid || loading}
             className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-            style={{ background: '#3b82f6', color: '#fff' }}
+            style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
           >
             {loading ? '처리 중...' : '다음'}
           </button>
 
           <p className="text-center text-xs text-gray-600">
             이미 계정이 있나요?{' '}
-            <a href="/login" className="text-blue-400 font-semibold">로그인</a>
+            <a href="/login" className="text-white font-semibold">로그인</a>
           </p>
         </div>
       )}
@@ -352,12 +352,12 @@ export default function OnboardingPage() {
                         className="px-3 py-1.5 rounded-full text-sm font-medium transition-all active:scale-95"
                         style={{
                           background: selected
-                            ? 'rgba(59,130,246,0.15)'
+                            ? 'rgba(255,255,255,0.12)'
                             : 'rgba(255,255,255,0.06)',
                           border: selected
-                            ? '1px solid #3b82f6'
+                            ? '1px solid rgba(255,255,255,0.6)'
                             : '1px solid rgba(255,255,255,0.1)',
-                          color: selected ? '#60a5fa' : 'rgba(255,255,255,0.75)',
+                          color: selected ? '#ffffff' : 'rgba(255,255,255,0.75)',
                         }}
                       >
                         #{kw}
@@ -375,7 +375,7 @@ export default function OnboardingPage() {
             onClick={handleStep2}
             disabled={selectedKeywords.size === 0 || loading}
             className="w-full mt-6 py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-            style={{ background: '#3b82f6', color: '#fff' }}
+            style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
           >
             {loading
               ? '처리 중...'
@@ -448,7 +448,7 @@ export default function OnboardingPage() {
               onClick={() => handleStep3(false)}
               disabled={loading}
               className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-              style={{ background: '#3b82f6', color: '#fff' }}
+              style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
             >
               {loading ? '처리 중...' : '연동하기'}
             </button>
@@ -502,7 +502,7 @@ export default function OnboardingPage() {
               onClick={() => handleComplete(true)}
               disabled={loading}
               className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-              style={{ background: '#3b82f6', color: '#fff' }}
+              style={{ background: 'linear-gradient(135deg, #ffffff, #d1d5db)', color: '#000' }}
             >
               {loading ? '처리 중...' : '알림 허용'}
             </button>
