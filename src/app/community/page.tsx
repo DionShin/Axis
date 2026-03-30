@@ -93,7 +93,7 @@ export default function CommunityPage() {
             className="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
             style={{
               background: selectedTag === tag ? '#ffffff' : 'rgba(255,255,255,0.05)',
-              color: selectedTag === tag ? '#fff' : '#6b7280',
+              color: selectedTag === tag ? '#000' : '#6b7280',
             }}
           >
             {tag}
