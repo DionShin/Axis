@@ -71,7 +71,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0c] text-white flex flex-col items-center justify-center px-6">
+    <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
 
       {/* 로고 */}
       <div className="mb-12 text-center">
@@ -83,7 +83,7 @@ export default function LoginPage() {
       {magicSent ? (
         <div
           className="w-full max-w-sm rounded-2xl p-6 text-center"
-          style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
         >
           <div className="text-4xl mb-3">📬</div>
           <h2 className="font-bold mb-2">이메일을 확인하세요</h2>

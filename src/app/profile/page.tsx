@@ -91,7 +91,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0c] text-white px-5 pt-8">
+    <main className="min-h-screen bg-black text-white px-5 pt-8">
 
       {/* 헤더 */}
       <header className="flex items-center justify-between mb-8">
@@ -109,8 +109,8 @@ export default function ProfilePage() {
       <section
         className="rounded-2xl p-5 mb-6"
         style={{
-          background: 'linear-gradient(135deg, #1e3a5f 0%, #0f1117 60%)',
-          border: '1px solid rgba(255,255,255,0.2)',
+          background: 'linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
+          border: '1px solid rgba(255,255,255,0.15)',
         }}
       >
         <div className="flex items-center gap-4 mb-4">
@@ -199,7 +199,7 @@ export default function ProfilePage() {
           <div
             key={item.label}
             className="rounded-2xl p-4 flex flex-col items-center gap-2"
-            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
           >
             <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: item.bg }}>
               {item.icon}
@@ -217,7 +217,7 @@ export default function ProfilePage() {
           onClick={togglePush}
           disabled={pushLoading}
           className="w-full flex items-center gap-3 p-4 rounded-2xl transition-all active:scale-[0.98] disabled:opacity-60"
-          style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+          style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
         >
           {pushEnabled
             ? <Bell size={16} className="text-white" />
@@ -241,7 +241,7 @@ export default function ProfilePage() {
         <button
           onClick={() => router.push('/community')}
           className="w-full flex items-center gap-3 p-4 rounded-2xl transition-all active:scale-[0.98]"
-          style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+          style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
         >
           <Share2 size={16} className="text-gray-400" />
           <span className="text-sm flex-1 text-left">내 루틴 공유하기</span>
@@ -258,7 +258,7 @@ export default function ProfilePage() {
         >
           <div
             className="w-full max-w-md rounded-t-3xl p-6 pb-10"
-            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.07)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
             onClick={e => e.stopPropagation()}
           >
             {/* 헤더 */}
@@ -274,7 +274,7 @@ export default function ProfilePage() {
               <p className="text-xs text-gray-500 font-semibold tracking-wider mb-3">계정</p>
               <div
                 className="rounded-2xl p-4"
-                style={{ background: '#0a0a0c', border: '1px solid rgba(255,255,255,0.07)' }}
+                style={{ background: '#000', border: '1px solid rgba(255,255,255,0.07)' }}
               >
                 <p className="text-xs text-gray-500 mb-0.5">이메일</p>
                 <p className="text-sm text-white">{user?.email ?? '—'}</p>

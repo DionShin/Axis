@@ -43,7 +43,7 @@ export default function CommunityPage() {
   const getStat = (statId: string) => stats.find(s => s.id === statId);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0c] text-white px-5 pt-8">
+    <main className="min-h-screen bg-black text-white px-5 pt-8">
 
       {/* 헤더 */}
       <header className="flex items-start justify-between mb-6">
@@ -64,7 +64,7 @@ export default function CommunityPage() {
       {/* 검색바 */}
       <div
         className="flex items-center gap-2 px-4 py-3 rounded-2xl mb-4"
-        style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
       >
         <Search size={15} className="text-gray-600 shrink-0" />
         <input
@@ -105,7 +105,7 @@ export default function CommunityPage() {
       {isLoading && (
         <div className="flex flex-col gap-3">
           {[1,2,3].map(i => (
-            <div key={i} className="h-48 rounded-2xl animate-pulse" style={{ background: '#0f1117' }} />
+            <div key={i} className="h-48 rounded-2xl animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />
           ))}
         </div>
       )}
@@ -131,7 +131,7 @@ export default function CommunityPage() {
             <div
               key={routine.id}
               className="rounded-2xl p-5"
-              style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.06)' }}
+              style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               {/* 저자 + 스탯 뱃지 */}
               <div className="flex items-center justify-between mb-3">

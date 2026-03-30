@@ -9,12 +9,12 @@ interface Props {
 }
 
 const SIZE = 300;
-const PAD = 50;       // 라벨 여백
-const TOTAL = SIZE + PAD * 2;
-const CX = TOTAL / 2;
+const PAD = 70;       // 라벨 여백
+const TOTAL = SIZE + PAD * 2; // 440
+const CX = TOTAL / 2;         // 220
 const CY = TOTAL / 2;
-const R = 125;        // 최대 반지름
-const LABEL_R = 162;  // 라벨 반지름
+const R = 148;        // 최대 반지름
+const LABEL_R = 190;  // 라벨 반지름
 
 // n각형 꼭짓점 좌표 계산 (12시 방향부터 시계방향)
 function getVertices(n: number, r: number, cx = CX, cy = CY) {
@@ -75,7 +75,7 @@ export default function StatRadarChart({ stats }: Props) {
           key={level}
           d={pointsToPath(getVertices(n, R * level))}
           fill="none"
-          stroke="#1e293b"
+          stroke="rgba(255,255,255,0.1)"
           strokeWidth={1}
           style={{ transition: animating ? 'd 0.4s ease' : undefined }}
         />
@@ -87,7 +87,7 @@ export default function StatRadarChart({ stats }: Props) {
           key={i}
           x1={CX} y1={CY}
           x2={v.x} y2={v.y}
-          stroke="#1e293b"
+          stroke="rgba(255,255,255,0.1)"
           strokeWidth={1}
         />
       ))}
@@ -96,9 +96,9 @@ export default function StatRadarChart({ stats }: Props) {
       <path
         d={dataPath}
         fill="#ffffff"
-        fillOpacity={0.08}
+        fillOpacity={0.1}
         stroke="#ffffff"
-        strokeWidth={1.5}
+        strokeWidth={2}
         strokeLinejoin="round"
         style={{
           transition: animating ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'all 0.6s ease',
@@ -114,7 +114,7 @@ export default function StatRadarChart({ stats }: Props) {
           <circle
             key={i}
             cx={px} cy={py}
-            r={3}
+            r={4}
             fill="#ffffff"
             style={{ transition: 'all 0.4s ease' }}
           />
@@ -155,7 +155,7 @@ export default function StatRadarChart({ stats }: Props) {
               textAnchor="middle"
               fontSize={11}
               fontWeight="700"
-              fill={stat.color}
+              fill="rgba(255,255,255,0.9)"
             >
               {stat.icon} {stat.name}
             </text>
@@ -164,7 +164,7 @@ export default function StatRadarChart({ stats }: Props) {
               y={lv.y + 10}
               textAnchor="middle"
               fontSize={10}
-              fill="#64748b"
+              fill="rgba(255,255,255,0.38)"
             >
               {Math.round(stat.score)}
             </text>

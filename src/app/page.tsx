@@ -23,7 +23,7 @@ function NewsCard({ article }: { article: NewsArticle }) {
       target="_blank"
       rel="noopener noreferrer"
       className="block rounded-2xl overflow-hidden transition-all active:scale-[0.98]"
-      style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+      style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
     >
       {/* YouTube 썸네일 */}
       {article.thumbnail && (
@@ -79,7 +79,7 @@ function ShortsCard({ article }: { article: NewsArticle }) {
       target="_blank"
       rel="noopener noreferrer"
       className="flex-shrink-0 w-36 rounded-2xl overflow-hidden transition-all active:scale-[0.97]"
-      style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+      style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
     >
       {/* 썸네일 or 플레이스홀더 */}
       {article.thumbnail ? (
@@ -174,21 +174,21 @@ export default function Dashboard() {
 
   if (statsLoading) {
     return (
-      <main className="min-h-screen bg-[#0a0a0c] flex items-center justify-center">
+      <main className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-gray-600 text-sm animate-pulse">Loading...</div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0c] text-white px-5 pt-8">
+    <main className="min-h-screen bg-black text-white px-5 pt-8">
 
       {/* 상단: 레벨 & XP 바 */}
       <section className="mb-8">
         <div className="flex justify-between items-end mb-2">
           <div>
             <p className="text-[10px] text-gray-600 mb-0.5 tracking-widest uppercase">Your Level</p>
-            <h2 className="text-2xl font-black italic text-white">Lv.{level}</h2>
+            <h2 className="text-2xl font-black italic text-white" style={{ textShadow: '0 0 20px rgba(255,255,255,0.4)' }}>Lv.{level}</h2>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-600">{xpCurrent} / 100 XP</span>
@@ -209,6 +209,9 @@ export default function Dashboard() {
           />
         </div>
       </section>
+
+      {/* 구분선 */}
+      <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', margin: '0 0 24px' }} />
 
       {/* 중앙: 오각형 레이더 차트 */}
       <section className="mb-5">
@@ -260,6 +263,9 @@ export default function Dashboard() {
         );
       })()}
 
+      {/* 구분선 */}
+      <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', margin: '0 0 24px' }} />
+
       {/* 오늘의 루틴 */}
       <section className="space-y-3 pb-6">
         <div className="flex items-center justify-between">
@@ -271,9 +277,9 @@ export default function Dashboard() {
         {upcomingRoutine && (
           <div
             className="rounded-2xl p-4 flex gap-3 items-start"
-            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.08)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}
           >
-            <div className="rounded-xl p-2 mt-0.5 shrink-0" style={{ background: 'rgba(59,130,246,0.1)' }}>
+            <div className="rounded-xl p-2 mt-0.5 shrink-0" style={{ background: 'rgba(255,255,255,0.07)' }}>
               <Bell size={15} className="text-white" />
             </div>
             <div>
@@ -290,7 +296,7 @@ export default function Dashboard() {
           <div
             key={routine.id}
             className="rounded-2xl p-4 flex items-center gap-3"
-            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
           >
             <div className="rounded-xl p-2 shrink-0" style={{ background: 'rgba(251,191,36,0.1)' }}>
               <Flame size={15} className="text-yellow-400" />
@@ -307,6 +313,9 @@ export default function Dashboard() {
           <p className="text-center text-gray-600 text-sm py-6">오늘 예정된 루틴이 없습니다</p>
         )}
       </section>
+
+      {/* 구분선 */}
+      <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', margin: '0 0 24px' }} />
 
       {/* ① 오늘의 경제 인사이트 */}
       {economyNews.length > 0 && (
@@ -361,7 +370,7 @@ export default function Dashboard() {
         >
           <div
             className="w-full max-w-md rounded-t-3xl p-6 pb-10 max-h-[80vh] overflow-y-auto"
-            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.07)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-5">
@@ -412,7 +421,7 @@ export default function Dashboard() {
                       onClick={() => setNewStatIcon(emoji)}
                       className="w-9 h-9 rounded-xl text-lg transition-all"
                       style={{
-                        background: newStatIcon === emoji ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.05)',
+                        background: newStatIcon === emoji ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)',
                         border: newStatIcon === emoji ? '1px solid rgba(255,255,255,0.6)' : '1px solid transparent',
                       }}
                     >

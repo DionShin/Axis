@@ -38,14 +38,14 @@ export default function HistoryPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#0a0a0c] flex items-center justify-center">
+      <main className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-gray-600 text-sm animate-pulse">Loading...</div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0c] text-white px-5 pt-8">
+    <main className="min-h-screen bg-black text-white px-5 pt-8">
 
       {/* 헤더 */}
       <header className="mb-8">
@@ -63,7 +63,7 @@ export default function HistoryPage() {
           <div
             key={item.label}
             className="rounded-2xl p-4 flex flex-col items-center gap-1"
-            style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
           >
             <span className="text-2xl">{item.icon}</span>
             <span className="text-xl font-black" style={{ color: item.color }}>{item.value}</span>
@@ -100,7 +100,7 @@ export default function HistoryPage() {
                   {/* 카드 */}
                   <div
                     className="flex-1 rounded-2xl p-4 mb-0"
-                    style={{ background: '#0f1117', border: '1px solid rgba(255,255,255,0.05)' }}
+                    style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
                   >
                     {/* 상단 */}
                     <div className="flex items-center justify-between mb-2">
