@@ -1,154 +1,144 @@
 'use client';
 
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { historyAPI, statsAPI } from '@/lib/api';
-import { timeAgo } from '@/lib/utils';
-import type { HistoryEventType } from '@/lib/types';
+import { checksAPI, routinesAPI } from '@/lib/api';
+import type { HeatmapItem } from '@/lib/types';
 
-// 이벤트 타입별 아이콘, 라벨, 색상
-const EVENT_META: Record<HistoryEventType, { icon: string; label: string; color: string }> = {
-  routine_added:   { icon: '➕', label: '루틴 시작',      color: '#ffffff' },
-  routine_deleted: { icon: '🗑️', label: '루틴 삭제',      color: '#f87171' },
-  habit_formed:    { icon: '🏆', label: '습관 정착',      color: '#fbbf24' },
-  forked:          { icon: '🔀', label: '루틴 복제',      color: '#a78bfa' },
-  quit:            { icon: '🚩', label: '포기',           color: '#f87171' },
-  streak_broken:   { icon: '💔', label: '연속 달성 중단', color: '#fb923c' },
-};
+type Period = 'weekly' | 'monthly';
 
-// 날짜 포맷: '2026.03.11 (수)'
-function formatFullDate(isoString: string): string {
-  const d = new Date(isoString);
-  const days = ['일', '월', '화', '수', '목', '금', '토'];
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} (${days[d.getDay()]})`;
+function getRateColor(rate: number): string {
+  if (rate === 0) return 'rgba(255,255,255,0.05)';
+  if (rate < 40) return 'rgba(255,255,255,0.15)';
+  if (rate < 70) return 'rgba(255,255,255,0.4)';
+  return 'rgba(255,255,255,0.85)';
 }
 
+const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
+
 export default function HistoryPage() {
-  const { data: history = [], isLoading } = useQuery({
-    queryKey: ['history'],
-    queryFn: historyAPI.getAll,
+  const [period, setPeriod] = useState<Period>('weekly');
+  const days = period === 'weekly' ? 28 : 90;
+
+  const { data: heatmap = [], isLoading } = useQuery({
+    queryKey: ['heatmap', days],
+    queryFn: () => checksAPI.heatmap(days),
   });
 
-  const { data: stats = [] } = useQuery({
-    queryKey: ['stats'],
-    queryFn: statsAPI.getAll,
+  const { data: routines = [] } = useQuery({
+    queryKey: ['routines', 'active'],
+    queryFn: () => routinesAPI.getAll('active'),
   });
 
-  // 이미 내림차순 정렬돼서 옴 (서버에서 처리)
-  const sorted = history;
-
-  if (isLoading) {
-    return (
-      <main className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-gray-600 text-sm animate-pulse">Loading...</div>
-      </main>
-    );
+  // 히트맵을 주 단위로 그룹핑
+  const weeks: HeatmapItem[][] = [];
+  if (heatmap.length > 0) {
+    // 첫날 요일에 맞게 패딩
+    const firstDate = new Date(heatmap[0].date);
+    const firstDow = (firstDate.getDay() + 6) % 7; // 월=0
+    const padded: (HeatmapItem | null)[] = [...Array(firstDow).fill(null), ...heatmap];
+    for (let i = 0; i < padded.length; i += 7) {
+      weeks.push(padded.slice(i, i + 7) as HeatmapItem[]);
+    }
   }
 
   return (
     <main className="min-h-screen bg-black text-white px-5 pt-8">
 
-      {/* 헤더 */}
-      <header className="mb-8">
-        <h1 className="text-xl font-black mb-1">성장 히스토리</h1>
-        <p className="text-xs text-gray-500">나의 루틴 여정을 돌아보세요</p>
+      <header className="mb-6">
+        <h1 className="text-xl font-black mb-1">히스토리</h1>
+        <p className="text-xs text-gray-500">내 루틴의 흐름을 확인해보세요</p>
       </header>
 
-      {/* 요약 통계 */}
-      <section className="grid grid-cols-3 gap-3 mb-8">
-        {[
-          { label: '정착한 습관', value: history.filter(h => h.event_type === 'habit_formed').length, color: '#fbbf24', icon: '🏆' },
-          { label: '복제한 루틴', value: history.filter(h => h.event_type === 'forked').length,       color: '#a78bfa', icon: '🔀' },
-          { label: '시작한 루틴', value: history.filter(h => h.event_type === 'routine_added').length, color: '#ffffff', icon: '➕' },
-        ].map(item => (
-          <div
-            key={item.label}
-            className="rounded-2xl p-4 flex flex-col items-center gap-1"
-            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
+      {/* 기간 토글 */}
+      <div
+        className="flex rounded-xl p-1 mb-6"
+        style={{ background: 'rgba(255,255,255,0.05)' }}
+      >
+        {(['weekly', 'monthly'] as Period[]).map(p => (
+          <button
+            key={p}
+            onClick={() => setPeriod(p)}
+            className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
+            style={{
+              background: period === p ? '#ffffff' : 'transparent',
+              color: period === p ? '#000' : '#6b7280',
+            }}
           >
-            <span className="text-2xl">{item.icon}</span>
-            <span className="text-xl font-black" style={{ color: item.color }}>{item.value}</span>
-            <span className="text-[10px] text-gray-500 text-center">{item.label}</span>
-          </div>
+            {p === 'weekly' ? '4주' : '3개월'}
+          </button>
         ))}
+      </div>
+
+      {/* 히트맵 */}
+      <section className="mb-8">
+        <div className="flex gap-1 mb-1.5">
+          {DAY_LABELS.map(d => (
+            <div key={d} className="flex-1 text-center text-[10px] text-gray-600">{d}</div>
+          ))}
+        </div>
+        {isLoading ? (
+          <div className="h-32 rounded-xl animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />
+        ) : (
+          <div className="space-y-1">
+            {weeks.map((week, wi) => (
+              <div key={wi} className="flex gap-1">
+                {Array.from({ length: 7 }, (_, di) => {
+                  const item = week[di];
+                  if (!item) return <div key={di} className="flex-1 aspect-square" />;
+                  return (
+                    <div
+                      key={di}
+                      className="flex-1 aspect-square rounded-sm"
+                      style={{ background: getRateColor(item.rate) }}
+                      title={`${item.date}: ${item.checked}/${item.total}`}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center gap-2 mt-2 justify-end">
+          <span className="text-[10px] text-gray-600">적음</span>
+          {[0, 25, 50, 75, 100].map(r => (
+            <div key={r} className="w-3 h-3 rounded-sm" style={{ background: getRateColor(r) }} />
+          ))}
+          <span className="text-[10px] text-gray-600">많음</span>
+        </div>
       </section>
 
-      {/* 타임라인 */}
-      <section>
-        <h2 className="text-sm font-semibold text-gray-300 mb-5">타임라인</h2>
-        <div className="relative">
-          {/* 세로 선 */}
+      {/* 구분선 */}
+      <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', marginBottom: 24 }} />
+
+      {/* 루틴별 현황 */}
+      <section className="space-y-3 pb-24">
+        <h2 className="text-sm font-semibold text-gray-300 mb-4">루틴별 현황</h2>
+        {routines.map(r => (
           <div
-            className="absolute left-[19px] top-2 bottom-2 w-px"
-            style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.08), transparent)' }}
-          />
-
-          <div className="space-y-6">
-            {sorted.map((item) => {
-              const meta = EVENT_META[item.event_type as HistoryEventType] ?? { icon: '📌', label: '기록', color: '#94a3b8' };
-              const stat = stats.find(s => s.id === item.stat_id);
-
-              return (
-                <div key={item.id} className="flex gap-4">
-                  {/* 타임라인 도트 */}
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-base shrink-0 relative z-10"
-                    style={{ background: meta.color + '18', border: `1px solid ${meta.color}33` }}
-                  >
-                    {meta.icon}
-                  </div>
-
-                  {/* 카드 */}
-                  <div
-                    className="flex-1 rounded-2xl p-4 mb-0"
-                    style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
-                  >
-                    {/* 상단 */}
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                          style={{ background: meta.color + '18', color: meta.color }}
-                        >
-                          {meta.label}
-                        </span>
-                        {stat && (
-                          <span
-                            className="text-[10px] font-semibold"
-                            style={{ color: stat.color }}
-                          >
-                            {stat.icon} {stat.name}
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] text-gray-600">{timeAgo(item.created_at)}</span>
-                    </div>
-
-                    {/* 루틴명 */}
-                    {item.routine_name && (
-                      <p className="text-sm font-semibold mb-1">'{item.routine_name}'</p>
-                    )}
-
-                    {/* 내용 */}
-                    <p className="text-xs text-gray-400">{item.content}</p>
-
-                    {/* 메모 (선택) */}
-                    {item.note && (
-                      <div
-                        className="mt-2 p-2 rounded-lg text-[11px] text-gray-500 italic"
-                        style={{ background: 'rgba(255,255,255,0.03)' }}
-                      >
-                        💬 {item.note}
-                      </div>
-                    )}
-
-                    {/* 날짜 */}
-                    <p className="text-[10px] text-gray-700 mt-2">{formatFullDate(item.created_at)}</p>
-                  </div>
-                </div>
-              );
-            })}
+            key={r.id}
+            className="rounded-2xl p-4"
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-semibold">{r.name}</p>
+              <div className="flex items-center gap-2">
+                {r.streak > 0 && <span className="text-xs text-gray-400">🔥 {r.streak}일</span>}
+                <span className="text-xs font-bold text-white">{r.weekly_rate}%</span>
+              </div>
+            </div>
+            <div className="w-full h-1 bg-gray-900 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{ width: `${r.weekly_rate}%`, background: 'rgba(255,255,255,0.7)' }}
+              />
+            </div>
+            <p className="text-[10px] text-gray-600 mt-1.5">최근 7일 달성률</p>
           </div>
-        </div>
+        ))}
+        {routines.length === 0 && (
+          <p className="text-center text-gray-600 text-sm py-8">활성 루틴이 없어요</p>
+        )}
       </section>
     </main>
   );

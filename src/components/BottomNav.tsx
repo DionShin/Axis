@@ -2,20 +2,20 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, ScrollText, User } from 'lucide-react';
+import { Home, CalendarDays, BarChart2, List, Settings } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { href: '/',           label: '홈',      icon: Home      },
-  { href: '/community',  label: '커뮤니티', icon: Users     },
-  { href: '/history',    label: '히스토리', icon: ScrollText },
-  { href: '/profile',    label: '프로필',  icon: User      },
+  { href: '/',          label: '홈',      icon: Home         },
+  { href: '/history',   label: '히스토리', icon: CalendarDays },
+  { href: '/report',    label: '리포트',  icon: BarChart2    },
+  { href: '/routines',  label: '루틴',    icon: List         },
+  { href: '/settings',  label: '설정',    icon: Settings     },
 ];
 
-const HIDE_NAV = ['/login', '/onboarding', '/auth', '/onboarding/nickname'];
+const HIDE_NAV = ['/login', '/onboarding', '/auth'];
 
 export default function BottomNav() {
   const pathname = usePathname();
-
   if (HIDE_NAV.some(p => pathname.startsWith(p))) return null;
 
   return (
@@ -38,8 +38,8 @@ export default function BottomNav() {
                 isActive ? 'text-white' : 'text-gray-600'
               }`}
             >
-              <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />
-              <span className="text-[11px] font-medium">{label}</span>
+              <Icon size={20} strokeWidth={isActive ? 2.5 : 1.5} />
+              <span className="text-[10px] font-medium">{label}</span>
             </Link>
           );
         })}
